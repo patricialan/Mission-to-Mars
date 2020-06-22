@@ -90,66 +90,63 @@ def scrape_all():
 
         # Convert dataframe to html format, add bootstrap
         return df.to_html()
+
+    ### Hemispheres Titles & Images
+
+    def hemis_data(browser):
+
+        def hemis_dict(hemisphere):
+            hemis_dict = {}
+    
+            # Visit hemisphere images url
+            url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
+            browser.visit(url)
+
+            # Click hemisphere link
+            browser.is_element_present_by_text(f'{hemisphere} Hemisphere Enhanced', wait_time=1)
+            hemis_elem = browser.links.find_by_partial_text(f'{hemisphere} Hemisphere Enhanced')
+            hemis_elem.click()
+
+            # Parse html with soup
+            html = browser.html
+            hemis_titleImg_soup = BeautifulSoup(html, 'html.parser')
+
+            # Get hemisphere title
+            hemis_title = hemis_titleImg_soup.find("h2", class_="title").get_text()
+            hemis_dict['title'] = hemis_title
+                
+            # Get hemisphere image url
+            hemis_imgUrl = hemis_titleImg_soup.find('a', text='Sample').get("href")
+            hemis_dict['img_url'] = hemis_imgUrl
+
+            return hemis_dict
+        
+        hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles Marineris']
+
+        hemis_data = [hemis_dict(hemisphere) for hemisphere in hemispheres]
+
+        return hemis_data
     
     # Create variable for data dictionary (for mongo)
     news_title, news_paragraph = mars_news(browser)
+    hemis_data = hemis_data(browser)
 
     data = {
         'news_title': news_title,
         'news_paragraph': news_paragraph,
         'featured_image': featured_image(browser),
         'facts': mars_facts(),
-        'last_modified': dt.datetime.now()
+        'last_modified': dt.datetime.now(),
+        'hemis': hemis_data
     }
 
     # Quit automated browser
     browser.quit()
 
-    # return data dictionary
+    # return data dictionary & hemis_data list
     return data
-
-### Hemispheres Titles & Images
-
-def hemis_data():
-    # Initiate headless driver for deployment
-    browser = Browser('chrome', executable_path ='chromedriver', headless=True)
-
-    def hemis_dict(hemisphere):
-        hemis_dict = {}
-    
-        # Visit hemisphere images url
-        url = 'https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars'
-        browser.visit(url)
-
-        # Click hemisphere link
-        browser.is_element_present_by_text(f'{hemisphere} Hemisphere Enhanced', wait_time=1)
-        hemis_elem = browser.links.find_by_partial_text(f'{hemisphere} Hemisphere Enhanced')
-        hemis_elem.click()
-
-        # Parse html with soup
-        html = browser.html
-        hemis_titleImg_soup = BeautifulSoup(html, 'html.parser')
-
-        # Get hemisphere title
-        hemis_title = hemis_titleImg_soup.find("h2", class_="title").get_text()
-        hemis_dict['title'] = hemis_title
-                
-        # Get hemisphere image url
-        hemis_imgUrl = hemis_titleImg_soup.select_one('div.content dl dd a').get("href")
-        hemis_dict['img_url'] = hemis_imgUrl
-
-        return hemis_dict
-        
-    hemispheres = ['Cerberus', 'Schiaparelli', 'Syrtis Major', 'Valles Marineris']
-
-    hemis_data = [hemis_dict(hemisphere) for hemisphere in hemispheres]
-
-    # Quit automated browser
-    browser.quit()
-
-    # Return hemis_data list of dictionaries
-    return hemis_data
 
 if __name__ == "__main__":
     # If running as script, print scraped data
-    print(scrape_all(), hemis_data())
+    print(scrape_all())
+

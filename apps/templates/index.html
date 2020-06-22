@@ -23,20 +23,16 @@
         <!-- Section for Mars News -->
         <div class='row' id='mars-news'>
             <div class='col-md-12'>
-                <div class='media'>
-                    <div class='media-body'>
-                        <h2>Latest Mars News</h2>
-                        <h4 class='media-heading'>{{mars.news_title}}</h4>
-                        <p>{{mars.news_paragraph}}</p>
-                    </div>
-                </div>
+                <h2 class='text-center'>Latest Mars News</h2>
+                <h4 class='text-center'>{{mars.news_title}}</h4>
+                <p>{{mars.news_paragraph}}</p>
             </div>
         </div>
 
         <!-- Section for Featured Image and Facts Table -->
         <div class='row' id='mars-featured-image'>
             <div class='col-md-8'>
-                <h2>Featured Mars Image</h2>
+                <h2 class='text-center'>Featured Mars Image</h2>
 
                 <!-- if images is False/None/non-existent, then default to error message -->
                 <img 
@@ -49,7 +45,7 @@
             <div class='col-md-4'>
                 <!-- Mars Facts -->
                 <div class='row', id='mars-facts'>
-                    <h4>Mars Facts</h4>
+                    <h2 class='text-center'>Mars Facts</h2>
                     {{mars.facts | safe}}
                 </div>
             </div>
@@ -66,6 +62,27 @@
             </div>
         </div>
         
+        <div class='row' id='mars_list'>
+            {% for dict in mars.hemis %}
+                <div class='col-md-3'>
+                    <div class='thumbnail'>
+                        <a href="{{dict.img_url | default('static/images/error.png', true) }}" target="_blank">
+                            <!-- if images is False/None/non-existent, then default to error message -->
+                            <img src="{{dict.img_url | default('static/images/error.png', true) }}"  
+                                alt="Thumbnail image">
+                            <div class='caption text-center'>
+                                <div class='media'>
+                                    <div class='media-body'>
+                                        <h4 class='media-heading text-center'>{{dict.title}}</h4>
+                                    </div>
+                                </div>
+                            </div>  
+                        </a> 
+                    </div>         
+                </div>
+            {% endfor %}
+        </div>
+
     </div>
 </body>
 </html>

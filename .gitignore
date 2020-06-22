@@ -1,6 +1,5 @@
 # my files to ignore
-apps/scraping_test.py
-apps/templates/index_test.html
+apps/templates/index_prettyTable.html
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
