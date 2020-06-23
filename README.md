@@ -2,7 +2,7 @@
 
 # Project Overview
 
-This project created a web application that displayed Mars data retrieved by automated webscraping. See "Resources" for the websites used. Chrome Developer Tools were used to identify HTML components, and Beautiful Soup and Splinter were used to automate webscraping. MongoDB stored the webscraped data and Flask displayed the data in a web app. Bootstrap was used to style the web app. 
+This project created a web application that displayed Mars data retrieved by automated webscraping. See "Resources" for the websites used. Chrome Developer Tools were used to identify HTML components, and Beautiful Soup and Splinter were used to automate webscraping. MongoDB stored the webscraped data and Flask displayed the data in a web app. Bootstrap was used to style the web app. App files are available in the "apps" directory.
 
 # Resources
 #### Software
